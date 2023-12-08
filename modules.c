@@ -1,6 +1,6 @@
 #include "heap.h"
 #include "avp.h"
-
+#include "processo.h"
 //implementacao da arvore e do heap
 
 /*
@@ -108,7 +108,7 @@ Tno *criarTno(int elemento) {
 }
 
 Tno *inserir(Tno *a, int valor) {
-    Tno *dado = criar(valor);
+    Tno *dado = criarTno(valor);
     a = incluir_no(a, dado);
     if (a != NULL) {
         a->cor = preto;
@@ -172,7 +172,7 @@ void imprime(Tno *a) {
 	aqui segue a implementação de processo
 */
 
-void mudancaStatus(processo *p){
+void mudancaStatus(processo* p){
 	if(p->status==aberto){
 		p->status=concluido;
 	}

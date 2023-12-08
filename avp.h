@@ -1,18 +1,18 @@
-// avp.h
+#ifndef AVP_H  // Evita redefinição
+#define AVP_H
 
 #include<stdio.h>
 #include<conio.h>
 #include<stdlib.h>
 
-#define vermelho 0
-#define preto 1
+typedef enum {vermelho, preto} Tcor;
 
-typedef struct{
+typedef struct no{
 	int elemento;
 	int cor;
-	
-	struct Tno* esq;
-	struct Tno* dir;
+
+	struct no* esq;
+	struct no* dir;
 
 }Tno;
 
@@ -28,3 +28,5 @@ int cor(Tno* a);
 void trocaCor(Tno* a);
 
 void imprime(Tno* a);
+
+#endif 
