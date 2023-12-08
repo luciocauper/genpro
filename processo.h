@@ -1,12 +1,14 @@
 //arquivo processo.h
+#ifndef PROCESSO_H  // Evita redefinicao
+#define PROCESSO_H
 
 #include<stdio.h>
 #include<conio.h>
 #include<stdlib.h>
 
-typedef enum prioridade {baixo,medio,alto};
+typedef enum prioridade {baixo,medio,alto} Prioridade;
 
-typedef enum status {aberto,concluido};
+typedef enum status {aberto,concluido} Status;
 
 typedef struct processo{
 	int id;
@@ -16,3 +18,6 @@ typedef struct processo{
 }processo;
 
 void mudancaStatus(processo *p);
+
+processo* criarProcesso(int id, const char* desc, int prioridade);
+#endif 

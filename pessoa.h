@@ -9,4 +9,11 @@ typedef struct pessoa{
     int id;
     char nome[50];
     Tno * arvore;
-}pessoa;
+    struct pessoa * prox;
+}Pessoa;
+
+Pessoa criarPessoa(int id, const char* nome);
+
+Pessoa* inserirNoInicio(Pessoa* lista, int id, const char* nome);
+
+void addProcesso(Pessoa* p, processo b);

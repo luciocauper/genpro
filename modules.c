@@ -1,17 +1,19 @@
 #include "heap.h"
 #include "avp.h"
 #include "processo.h"
+#include "pessoa.h"
+
 //implementacao da arvore e do heap
 
 /*
-	aqui segue a implementação do heap
+	aqui segue a implementaï¿½ï¿½o do heap
 */
 
 heap* criar(int nmax){
 	heap *h = (heap *) malloc(sizeof(heap));
 	h->n = 0;
 	h->nmax = nmax;
-	h->v = (int *) malloc(h->nmax * sizeof(int));
+	h->v = (processo *) malloc(h->nmax * sizeof(processo));
 	return h;
 }
 
@@ -27,9 +29,9 @@ int heap_vazia (heap *h){
 
 void sobe (heap *h, int i){
 	int pai;
-	while(i>0){ //enquanto não estiver na raiz
+	while(i>0){ //enquanto nï¿½o estiver na raiz
 		pai = pai(i);
-		if((h->v[pai])> (h->v[i]))
+		if((h->v[pai].id)> (h->v[i].id))
 			break;
 		troca(h, pai, i);
 		i = pai;
@@ -37,9 +39,9 @@ void sobe (heap *h, int i){
 }
 
 void troca (heap *h, int i, int j){
-	int temp = h->v[i];
-	h->v[i] = h->v[j];
-	h->v[j] = temp;
+	int temp = h->v[i].id;
+	h->v[i].id = h->v[j].id;
+	h->v[j].id = temp;
 }
 
 void desce (heap *h, int i){
@@ -47,9 +49,9 @@ void desce (heap *h, int i){
 	int filho_dir;
 	while(aux < h->n){
 		filho_dir = dir(i);
-		if((filho_dir < h->n) && (h->v[filho_dir] > h->v[aux]))
+		if((filho_dir < h->n) && (h->v[filho_dir].id > h->v[aux].id))
 			aux = filho_dir;
-		if(h->v[aux] < h->v[i])
+		if(h->v[aux].id < h->v[i].id)
 			break;	
 		troca(h,i,aux);
 		i = aux;
@@ -57,13 +59,13 @@ void desce (heap *h, int i){
 	}
 }
 
-void heap_insere(heap *h, int valor){
+void heap_insere(heap *h, processo valor){
 	h->v[h->n++] = valor;
 	sobe(h, h->n-1);	
 }
 
 int heap_retira (heap *h){
-	int topo = h->v[0]; //remove o elemento do topo
+	int topo = h->v[0].id; //remove o elemento do topo
 	h->v[0] = h->v[--(h->n)];
 	desce(h,0);
 	return topo;
@@ -73,11 +75,12 @@ void mostrar(heap *h){
 	int i=0;
 	puts("-----------ELEMENTOS-----------");
 	for(int i=0;i<h->n;i++)
-		printf("%d -", h->v[i]);
+		printf("ID=%d, Desc=%s, Prioridade=%d, Status=%d\n",
+               h->v[i].id, h->v[i].desc, h->v[i].prioridade, h->v[i].status);
 }
 
 /*
-	aqui segue a implementação da arvore vermelho e preta
+	aqui segue a implementaï¿½ï¿½o da arvore vermelho e preta
 */
 
 Tno *rotacao_simples_esquerda(Tno *a) {
@@ -98,7 +101,7 @@ Tno *rotacao_simples_direita(Tno *a) {
     return a;
 }
 
-Tno *criarTno(int elemento) {
+Tno *criarTno(processo elemento) {
     Tno *dado = (Tno *)malloc(sizeof(Tno));
     dado->elemento = elemento;
     dado->esq = NULL;
@@ -107,7 +110,7 @@ Tno *criarTno(int elemento) {
     return dado;
 }
 
-Tno *inserir(Tno *a, int valor) {
+Tno *inserir(Tno *a, processo valor) {
     Tno *dado = criarTno(valor);
     a = incluir_no(a, dado);
     if (a != NULL) {
@@ -120,7 +123,7 @@ Tno *incluir_no(Tno *a, Tno *dado) {
     if (a == NULL) {
         return dado;
     } else {
-        if (a->elemento > dado->elemento) {
+        if (a->elemento.id > dado->elemento.id) {
             a->esq = incluir_no(a->esq, dado);
         } else {
             a->dir = incluir_no(a->dir, dado);
@@ -154,13 +157,13 @@ void imprime(Tno *a) {
     if (a == NULL) {
         return;
     }
-    printf("%d [cor: %d]", a->elemento, a->cor);
+    printf("%d [cor: %d]", a->elemento.id, a->cor);
 
     if (a->esq != NULL) {
-        printf("(E:%d [cor: %d])", a->esq->elemento, a->esq->cor);
+        printf("(E:%d [cor: %d])", a->esq->elemento.id, a->esq->cor);
     }
     if (a->dir != NULL) {
-        printf("(D:%d [cor: %d])", a->dir->elemento, a->dir->cor);
+        printf("(D:%d [cor: %d])", a->dir->elemento.id, a->dir->cor);
     }
     printf("\n");
 
@@ -169,7 +172,7 @@ void imprime(Tno *a) {
 }
 
 /*
-	aqui segue a implementação de processo
+	aqui segue a implementaï¿½ï¿½o de processo
 */
 
 void mudancaStatus(processo* p){
@@ -177,4 +180,40 @@ void mudancaStatus(processo* p){
 		p->status=concluido;
 	}
 	else p->status=aberto;
+}
+
+processo* criarProcesso(int id, const char* desc, int prioridade){
+    processo* novoProcesso = (processo*)malloc(sizeof(processo));
+    novoProcesso->id=id;
+    strncpy(novoProcesso->desc, desc, sizeof(novoProcesso->desc));
+    novoProcesso->prioridade=prioridade;
+    novoProcesso->status=aberto;
+    return novoProcesso;
+}
+
+/*
+    abaixo a implemetaÃ§Ã£o de pessoas
+*/
+
+Pessoa criarPessoa(int id, const char* nome) {
+    Pessoa novaPessoa;
+    novaPessoa.id = id;
+    strncpy(novaPessoa.nome, nome, sizeof(novaPessoa.nome));
+    novaPessoa.arvore = NULL; 
+    novaPessoa.prox = NULL;  
+    return novaPessoa;
+}
+
+Pessoa* inserirNoInicio(Pessoa* lista, int id, const char* nome) {
+    Pessoa* novaPessoa = (Pessoa*)malloc(sizeof(Pessoa));
+    if (novaPessoa == NULL) {
+        exit(EXIT_FAILURE);
+    }
+    *novaPessoa = criarPessoa(id, nome);
+    novaPessoa->prox = lista;
+    return novaPessoa;
+}
+
+void addProcesso(Pessoa* p, processo b){
+        p->arvore = inserir(p->arvore,b);
 }
