@@ -4,9 +4,9 @@
 #include<conio.h>
 #include<stdlib.h>
 
-typedef enum {baixo,medio,alto} prioridade;
+typedef enum prioridade {baixo,medio,alto};
 
-typedef enum {aberto,concluido} status;
+typedef enum status {aberto,concluido};
 
 typedef struct processo{
 	int id;

@@ -4,14 +4,15 @@
 #include<conio.h>
 #include<stdlib.h>
 
-typedef enum {vermelho, preto} Tcor;
+#define vermelho 0
+#define preto 1
 
-typedef struct no{
+typedef struct{
 	int elemento;
 	int cor;
 	
-	struct no* esq;
-	struct no* dir;
+	struct Tno* esq;
+	struct Tno* dir;
 
 }Tno;
 
