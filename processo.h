@@ -19,5 +19,7 @@ typedef struct processo{
 
 void mudancaStatus(processo *p);
 
+void imprimirProcesso(processo p);
+
 processo* criarProcesso(int id, const char* desc, int prioridade);
 #endif 

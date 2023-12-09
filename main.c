@@ -6,7 +6,7 @@
 #include "heap.h"
 
 int main() {
-    int op, id = 0; // Inicializando id como 0
+    int op, id = 1; // Inicializando id como 0
     char nome[50];
     Pessoa user, *lista = NULL;
     processo pro;
@@ -29,18 +29,12 @@ int main() {
             case 1: {
                 printf("Insira o seu nome: ");
                 scanf("%s", nome);
-
-                // Encontrar o ID do último elemento na lista e incrementar em 1
-                int novoId = 1; // Valor inicial caso a lista esteja vazia
-
-                user = criarPessoa(novoId, nome);
-
-                if (idJaexiste(lista, novoId)) {
-                    printf("O id já existe\n");
-                } else {
-                    lista = inserirNoInicio(lista, user.id, user.nome);
-                    printf("Usuário inserido com sucesso na lista.\n");
+                if(lista!=NULL){
+                    id = lista->id+1;
+                    //user = criarPessoa(id,nome);
+                    lista = inserirNoInicio(lista,user.id,user.nome);
                 }
+
                 break;
             }
             case 2: {
@@ -54,6 +48,60 @@ int main() {
                 scanf("%s", desc);
                 break;
             }
+            case 4:{
+                printf("Informe o ID do usuario: ");
+                int op4;
+                scanf("%d",&op4);
+                Pessoa *aux = lista;
+                while (op4!=aux->id){
+                    aux=aux->prox;
+                    if (op4==aux->id){
+                        imprimirPessoa(aux);
+                    }
+                }
+                
+                break;
+            }
+            case 5:{
+                printf("Informe o ID do usuario: ");
+                int op5;
+                scanf("%d",&op5);
+                Pessoa *aux=lista;
+                while (op5!=aux->id){
+                    aux=aux->prox;
+                    if (op5==aux->id){
+                        printf("Nome atual: %s", aux->nome);
+                        printf("Qual o novo nome?\n");
+                        scanf("%s", nome);
+                        *aux->nome=nome;
+                        lista=aux;
+                    }
+                    
+                }
+                break;
+
+            }
+            case 7:{
+                int userid, pedid;
+                printf("Insira o ID do usuário e ID do pedido");
+                printf("Usuario-id: ");
+                scanf("%d",&userid);
+                printf("Pedido-id: ");
+                scanf("%d",&pedid);
+                Pessoa *aux = lista;
+                while (aux->id!=userid){
+                    aux=aux->prox;
+                    if (aux->id==userid){
+                        Tno* no=procurar(aux->arvore,pedid);
+                        mudancaStatus(no->elemento.status);
+                    }
+                    
+                }
+                
+
+                break;
+            }
+
             case 0: {
                 printf("Saindo do sistema...\n");
                 exit(0);

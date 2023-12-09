@@ -157,7 +157,8 @@ void imprime(Tno *a) {
     if (a == NULL) {
         return;
     }
-    printf("%d [cor: %d]", a->elemento.id, a->cor);
+    imprimirProcesso(a->elemento);
+    printf("\ncor: %d",a->cor);
 
     if (a->esq != NULL) {
         printf("(E:%d [cor: %d])", a->esq->elemento.id, a->esq->cor);
@@ -170,6 +171,20 @@ void imprime(Tno *a) {
     imprime(a->esq);
     imprime(a->dir);
 }
+
+Tno* procurar(Tno* raiz, int id) {
+    if (raiz == NULL || raiz->elemento.id == id) {
+        return raiz;
+    }
+    if (id < raiz->elemento.id) {
+        return procurar(raiz->esq, id);
+    }
+    else if (id > raiz->elemento.id) {
+        return procurar(raiz->dir, id);
+    }
+    return NULL;
+}
+
 
 /*
 	aqui segue a implementa��o de processo
@@ -191,6 +206,17 @@ processo* criarProcesso(int id, const char* desc, int prioridade){
     return novoProcesso;
 }
 
+void addProcesso(Pessoa* lista,int id, processo b){
+    while (id!=lista->id){
+        lista=lista->prox;
+    }
+    lista->arvore = inserir(lista->arvore,b);
+    
+}
+
+void imprimirProcesso(processo p){
+    printf("Id:%d\nDescricao:%s\nStatus:%d\nPrioridade:%d",p.id,p.desc,p.status,p.prioridade);
+}
 /*
     abaixo a implemetação de pessoas
 */
@@ -214,6 +240,10 @@ Pessoa* inserirNoInicio(Pessoa* lista, int id, const char* nome) {
     return novaPessoa;
 }
 
-void addProcesso(Pessoa* p, processo b){
-        p->arvore = inserir(p->arvore,b);
+void imprimirPessoa(Pessoa* lista){
+    while (lista!=NULL){
+        printf("Nome: %s, ID: %d",lista->nome,lista->id);
+        imprimir(lista->arvore);
+        lista = lista->prox;
+    }
 }

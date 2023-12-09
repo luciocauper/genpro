@@ -16,4 +16,6 @@ Pessoa criarPessoa(int id, const char* nome);
 
 Pessoa* inserirNoInicio(Pessoa* lista, int id, const char* nome);
 
-void addProcesso(Pessoa* p, processo b);
+void imprimirPessoa(Pessoa *lista);
+
+void addProcesso(Pessoa* lista,int id, processo b);
